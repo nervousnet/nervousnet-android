@@ -100,7 +100,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.ethz.coss.nervousnet.hub.ui.MainActivity" />
         </activity>
-
         <activity
             android:name=".ui.GenericSettingsActivity"
             android:label="@string/title_activity_sensors">
@@ -128,6 +127,9 @@
         <activity android:name=".ui.SharingNodeActivity" />
         <activity android:name=".ui.SensorPermissionsActivity" />
         <activity android:name=".ui.AxonSensorsActivity" />
+        <activity
+            android:name=".ui.SensorStatisticsViewActivity"
+            android:label="@string/title_activity_sensor_statistics_view"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@ android {
     buildToolsVersion '26.0.1'
     defaultConfig {
         applicationId "ch.ethz.coss.nervousnet.hub"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 23
         versionCode 47
         versionName '0.7.40 alpha'
@@ -26,8 +26,9 @@ android {
 
 dependencies {
     compile project(':nervousnetVM')
+    compile 'com.android.support:appcompat-v7:'
     compile 'com.android.support:support-v13:24.0.0'
     compile 'com.android.support:design:22.2.1'
-    compile 'com.android.support:appcompat-v7:'
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.android.support.constraint:constraint-layout:+'
 }

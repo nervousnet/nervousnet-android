@@ -231,8 +231,6 @@ public class SensorDisplayActivity extends FragmentActivity implements ActionBar
                 boolean errorFlag;
                 NNLog.d("SensorDisplayActivity", "before updating");
                 update(); // this function can change value of m_interval.
-
-
                 m_handler.postDelayed(m_statusChecker, m_interval);
             }
         };
@@ -287,6 +285,7 @@ public class SensorDisplayActivity extends FragmentActivity implements ActionBar
 
     @Override
     public void onServiceConnected() {
+
         startRepeatingTask();
 
     }

@@ -135,6 +135,8 @@ public class NervousnetVM {
     public void startSensors() {
         for (Long sensorID : configurationManager.getSensorIDs())
             startSensor(sensorID);
+
+
     }
 
 

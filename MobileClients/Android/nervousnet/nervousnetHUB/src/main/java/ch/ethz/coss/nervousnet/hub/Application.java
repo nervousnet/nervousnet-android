@@ -76,7 +76,6 @@ public class Application extends android.app.Application {
         NNLog.d(LOG_TAG, "Inside Application init()");
         nn_VM = new NervousnetVM(getApplicationContext());
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
         initNotification();
     }
 
