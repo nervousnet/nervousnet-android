@@ -8,6 +8,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
@@ -291,6 +292,24 @@ public class NervousnetVM {
 
     public void store(ArrayList<SensorReading> readings) {
         nervousnetDB.store(readings);
+    }
+
+
+
+    //####################################################################
+    //SHARE SENSOR DATA
+    //####################################################################
+
+    public void startSharing(HttpURLConnection connection) {
+        nervousnetDB.startSharing(connection);
+    }
+
+    public void stopSharing() {
+        nervousnetDB.stopSharing();
+    }
+
+    public boolean isSharingActive() {
+        return nervousnetDB.isSharingActive();
     }
 
 

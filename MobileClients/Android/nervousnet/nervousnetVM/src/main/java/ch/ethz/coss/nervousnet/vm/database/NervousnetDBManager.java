@@ -9,6 +9,10 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -41,6 +45,10 @@ public class NervousnetDBManager extends SQLiteOpenHelper implements Runnable {
 
     // Defining a singleton
     private static NervousnetDBManager instance = null;
+
+    // Connection to a sharing node where data is additionally pushed
+    // should the user activate it. The data is still stored in the local database
+    private HttpURLConnection shareConnection = null;
 
 
     // Extra hashmap for the latest insert only. Each registered sensor has
@@ -153,6 +161,26 @@ public class NervousnetDBManager extends SQLiteOpenHelper implements Runnable {
         return getReadings(config, query);
     }
 
+
+    //####################################################################
+    //SHARE
+    //####################################################################
+
+    public void startSharing(HttpURLConnection connection) {
+        if(shareConnection != null) {
+            shareConnection.disconnect();
+        }
+        shareConnection = connection;
+    }
+
+    public void stopSharing() {
+        shareConnection.disconnect();
+        shareConnection = null;
+    }
+
+    public boolean isSharingActive() {
+        return shareConnection != null;
+    }
 
     //####################################################################
     //STORE
@@ -371,5 +399,21 @@ public class NervousnetDBManager extends SQLiteOpenHelper implements Runnable {
         long stopTime = System.currentTimeMillis();
         long duration = stopTime - startTime;
         Log.d(LOG_TAG, "Store all readings in " + duration + "ms");
+
+        if(shareConnection != null) {
+            JSONArray json = new JSONArray();
+            for(Collection<SensorReading> list : tmp.values()) {
+                for(SensorReading reading : list) {
+                    try {
+                        json.put(reading.toJSON());
+                    } catch (JSONException e) {
+                        Log.w(LOG_TAG, "Unable to convert reading to json (" + reading.toString() + ")");
+                    }
+                }
+            }
+
+            Log.d(LOG_TAG, "Now we send data to some connection ...");
+            //TODO send converted json
+        }
     }
 }
