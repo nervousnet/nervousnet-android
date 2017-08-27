@@ -27,6 +27,7 @@ package ch.ethz.coss.nervousnet.hub.ui;
 
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -75,7 +76,11 @@ public class MainActivity extends BaseActivity {
                         AnalyticsActivity.class));
                 break;
             case 2:
-                startNextActivity(new Intent(MainActivity.this, SpaceActivity.class));
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=ETH+Zurich+-+COSS" )));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=ETH+Zurich+-+COSS")));
+                }
                 break;
             case 3:
                 startNextActivity(new Intent(MainActivity.this, SettingsActivity.class));

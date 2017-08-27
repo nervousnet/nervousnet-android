@@ -60,7 +60,7 @@ public class SettingsActivity extends BaseActivity {
         findViewById(R.id.sharing_nodes_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startNextActivity(new Intent(SettingsActivity.this, SharingNodeActivity.class));
+                startNextActivity(new Intent(SettingsActivity.this, SharingNodeActivity.class));
             }
         });
 
