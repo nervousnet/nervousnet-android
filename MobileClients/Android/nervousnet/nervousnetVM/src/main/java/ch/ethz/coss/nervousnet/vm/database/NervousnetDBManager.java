@@ -1,5 +1,6 @@
 package ch.ethz.coss.nervousnet.vm.database;
 
+import java.io.*;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,10 +10,21 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -41,6 +53,9 @@ public class NervousnetDBManager extends SQLiteOpenHelper implements Runnable {
 
     // Defining a singleton
     private static NervousnetDBManager instance = null;
+
+    // Are we currently sharing with remote?
+    private boolean isSharing = false;
 
 
     // Extra hashmap for the latest insert only. Each registered sensor has
@@ -151,6 +166,39 @@ public class NervousnetDBManager extends SQLiteOpenHelper implements Runnable {
                 " WHERE " + ConstantsDB.TIMESTAMP + " >= " + start + " AND " +
                 "" + ConstantsDB.TIMESTAMP + " <= " + stop + ";";
         return getReadings(config, query);
+    }
+
+
+    //####################################################################
+    //SHARE
+    //####################################################################
+
+    public void startSharing() {
+        isSharing = true;
+    }
+
+    public void stopSharing() {
+        isSharing = false;
+    }
+
+    public boolean isSharingActive() {
+        return isSharing;
+    }
+
+
+    private void sendDataToRemote(HashMap<Long, ArrayList<SensorReading>> data) {
+        for(Collection<SensorReading> list : data.values()) {
+            for(SensorReading reading : list) {
+
+                ParseObject pobj = new ParseObject(reading.getSensorName());
+                ArrayList<String> paramNames = reading.getParametersNames();
+                ArrayList values = reading.getValues();
+                for(int i = 0; i < paramNames.size(); i++) {
+                    pobj.put(paramNames.get(i), values.get(i));
+                }
+                pobj.saveInBackground();
+            }
+        }
     }
 
 
@@ -371,5 +419,10 @@ public class NervousnetDBManager extends SQLiteOpenHelper implements Runnable {
         long stopTime = System.currentTimeMillis();
         long duration = stopTime - startTime;
         Log.d(LOG_TAG, "Store all readings in " + duration + "ms");
+
+        if(isSharing) {
+            sendDataToRemote(tmp);
+
+        }
     }
 }

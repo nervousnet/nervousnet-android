@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -136,5 +139,16 @@ public class SensorReading implements Parcelable {
                 ", parametersNames=" + parametersNames +
                 ", values=" + TextUtils.join(", ", values) +
                 '}';
+    }
+
+    public JSONObject toJSON() throws JSONException {
+        JSONObject jsonReading = new JSONObject();
+
+        jsonReading.put("sensorID", sensorID);
+        jsonReading.put("sensorName", sensorName);
+        jsonReading.put("timestampEpoch", timestampEpoch);
+        jsonReading.put("values", values);
+
+        return new JSONObject();
     }
 }

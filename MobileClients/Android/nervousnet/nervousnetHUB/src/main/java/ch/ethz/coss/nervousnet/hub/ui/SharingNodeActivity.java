@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +17,13 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.parse.Parse;
 
+import ch.ethz.coss.nervousnet.hub.Application;
 import ch.ethz.coss.nervousnet.hub.R;
 import ch.ethz.coss.nervousnet.hub.ui.adapters.NervousnetNode;
 import ch.ethz.coss.nervousnet.hub.ui.adapters.NodesArrayAdapter;
+import ch.ethz.coss.nervousnet.vm.NervousnetVM;
 
 public class SharingNodeActivity extends BaseActivity {
 
@@ -34,12 +34,16 @@ public class SharingNodeActivity extends BaseActivity {
     private ListView list;
 
     private NervousnetNode[] nodesList;
+    private static final String LOG_TAG = "SharingNodeActivity";
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sharing_node);
 
         list = (ListView) findViewById(R.id.lst_Nodes);
+        final NervousnetVM nn_VM = ((Application) getApplication()).nn_VM;
+
 
         refreshData();
 
@@ -48,7 +52,73 @@ public class SharingNodeActivity extends BaseActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 vibrate();
                 Toast.makeText(SharingNodeActivity.this, "Do you want to remove " + nodesList[position].getName() + "?", Toast.LENGTH_SHORT).show();
-                return false;
+
+                return false; //FIXME ask for permission to remove (remove from DB and refresh UI)
+            }
+        });
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SharingNodeActivity.this);
+
+                final int pos = position;
+
+                //Configure OK Button
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Check if the server is connecting and inform user about result
+                        String urlstring = "http://207.154.242.197:1337/parse";
+                        try {
+                            //configure parse and share
+                            Parse.initialize(new Parse.Configuration.Builder(getApplication())
+                                    .applicationId("nervousnet")
+                                    .server(urlstring)
+                                    .build()
+                            );
+
+                            Log.d(LOG_TAG, "Successfully connected with node " + nodesList[pos].getName() + " at " + urlstring);
+                            Toast.makeText(SharingNodeActivity.this, "Starting to share with " + nodesList[pos].getName(), Toast.LENGTH_LONG).show();
+
+                            nn_VM.startSharing();
+
+                        } catch (Exception e) {
+                            Toast.makeText(SharingNodeActivity.this, "Unable to connect to " + nodesList[pos].getName(), Toast.LENGTH_LONG).show();
+                            Log.d(LOG_TAG, "Failed to connect to sharing server");
+                            dialog.cancel();
+                        }
+                    }
+                });
+
+                //show cancel or stop button based on if app currently is sharing
+                // TODO this should be improved, the "STOP" button appears if we click on any node but really it means to stop a previously started sharing (that could be with another node)
+                if(nn_VM.isSharingActive()) {
+                    //Configure Stop Button
+                    builder.setNegativeButton("Stop", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            nn_VM.stopSharing();
+                            dialog.dismiss();
+                        }
+                    });
+
+                    builder.setMessage("Stop sharing to any node or (re)start sharing with this node")
+                            .setTitle("Share to " + nodesList[pos].getName());
+                } else {
+                    //Configure Cancel Button
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.setMessage("Do you want to start sharing data to this node?")
+                            .setTitle("Share to " + nodesList[pos].getName());
+                }
+
+
+                //Show Dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
