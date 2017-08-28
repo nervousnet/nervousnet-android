@@ -12,7 +12,7 @@ Clausiusstrasse 50,\n 8092 Zürich,\n Switzerland\n</string>
     <string name="local_service_label">Nervousnet</string>
 
     <string-array name="main_grid">
-        <item>Sensors</item>
+    <!--    <item>Sensors</item> deactivated for now-->
         <item>Sensor Analytics</item>
         <item>Nervousnet Space</item>
         <item>Settings</item>

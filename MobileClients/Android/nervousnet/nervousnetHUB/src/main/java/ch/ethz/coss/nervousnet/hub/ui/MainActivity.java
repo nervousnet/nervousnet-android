@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity {
 
     protected void showNextActivity(int position) {
 
-        switch (position) {
+        switch (position + 1) { //FIXME: +1 is shitty hack to circumvent displaying SensorDisplayActivity
             case 0:
                 startNextActivity(new Intent(MainActivity.this, SensorDisplayActivity.class));
                 break;
