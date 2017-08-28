@@ -94,7 +94,7 @@
                     android:layout_gravity="center|center_horizontal"
                     android:layout_weight="0.5"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/ic_nodes_disabled"></ImageView>
+                    android:src="@drawable/ic_nodes"></ImageView>
 
                 <TextView
                     android:layout_width="0dp"
@@ -105,7 +105,7 @@
                     android:textColor="@color/black" />
             </LinearLayout>
 
-            <LinearLayout
+          <!--  <LinearLayout
                 android:id="@+id/sensor_perm_item"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -129,6 +129,8 @@
                     android:text="Sensor Permissions"
                     android:textColor="@color/black" />
             </LinearLayout>
+            -->
+
         </LinearLayout>
     </ScrollView>
 
