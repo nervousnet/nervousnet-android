@@ -300,8 +300,8 @@ public class NervousnetVM {
     //SHARE SENSOR DATA
     //####################################################################
 
-    public void startSharing(HttpURLConnection connection) {
-        nervousnetDB.startSharing(connection);
+    public void startSharing() {
+        nervousnetDB.startSharing();
     }
 
     public void stopSharing() {
