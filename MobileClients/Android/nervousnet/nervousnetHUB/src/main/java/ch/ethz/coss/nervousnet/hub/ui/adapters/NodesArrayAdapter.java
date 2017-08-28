@@ -17,7 +17,7 @@ public class NodesArrayAdapter extends ArrayAdapter<NervousnetNode> {
 
     Context context;
     int layoutResourceID;
-    NervousnetNode data[];
+    public NervousnetNode data[];
 
     public NodesArrayAdapter(Context context, int resource, NervousnetNode[] data) {
         super(context, resource, data);
@@ -34,7 +34,7 @@ public class NodesArrayAdapter extends ArrayAdapter<NervousnetNode> {
         }
 
         TextView txtNodeName = (TextView) convertView.findViewById(R.id.txt_node_name);
-        txtNodeName.setText(data[position].nodeName);
+        txtNodeName.setText(data[position].getName());
 
         return convertView;
 
