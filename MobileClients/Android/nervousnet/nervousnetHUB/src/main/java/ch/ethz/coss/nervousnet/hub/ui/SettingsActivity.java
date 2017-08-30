@@ -43,13 +43,14 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        /* not available in iOS, therefore disabling this setting for now
         findViewById(R.id.gen_settings_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startNextActivity(new Intent(SettingsActivity.this, GenericSettingsActivity.class));
             }
         });
-
+*/
         findViewById(R.id.coll_rate_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
