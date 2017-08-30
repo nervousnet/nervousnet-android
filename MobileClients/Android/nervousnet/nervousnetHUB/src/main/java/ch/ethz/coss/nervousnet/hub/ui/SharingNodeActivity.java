@@ -80,6 +80,7 @@ public class SharingNodeActivity extends BaseActivity {
 
                             Log.d(LOG_TAG, "Successfully connected with node " + nodesList[pos].getName() + " at " + urlstring);
                             Toast.makeText(SharingNodeActivity.this, "Starting to share with " + nodesList[pos].getName(), Toast.LENGTH_LONG).show();
+                            //FIXME: nonsense urls don'g generate errors
 
                             nn_VM.startSharing();
 
