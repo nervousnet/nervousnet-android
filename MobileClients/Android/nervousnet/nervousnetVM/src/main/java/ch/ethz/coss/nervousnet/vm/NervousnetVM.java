@@ -382,6 +382,9 @@ public class NervousnetVM {
     //####################################################################
 
     public synchronized UUID getUUID() {
+        if(uuid == null) {
+            newUUID();
+        }
         return uuid;
     }
 
