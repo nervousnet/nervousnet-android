@@ -44,7 +44,6 @@ public class SharingNodeActivity extends BaseActivity {
         list = (ListView) findViewById(R.id.lst_Nodes);
         final NervousnetVM nn_VM = ((Application) getApplication()).nn_VM;
 
-
         refreshData();
 
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -68,7 +67,9 @@ public class SharingNodeActivity extends BaseActivity {
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //Check if the server is connecting and inform user about result
-                        String urlstring = "http://207.154.242.197:1337/parse";
+                        refreshData();
+
+                        String urlstring = nodesList[pos].getIp();
                         try {
                             //configure parse and share
                             Parse.initialize(new Parse.Configuration.Builder(getApplication())
@@ -169,8 +170,18 @@ public class SharingNodeActivity extends BaseActivity {
     }
 
     private String getSharedPreferences() {
+        String defaultName = "Primary server";
+        String defaultIp = "http://207.154.242.197:1337/parse";
+        JSONObject defaultObject = new JSONObject();
+        try {
+            defaultObject.put("name", defaultName);
+            defaultObject.put("ip", defaultIp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        String restoredText = prefs.getString("sharingNodesJSON", "[]");
+        String restoredText = prefs.getString("sharingNodesJSON", "[" + defaultObject.toString() + "]");
         return restoredText;
     }
 
@@ -180,11 +191,9 @@ public class SharingNodeActivity extends BaseActivity {
             object.put("name", name);
             object.put("ip", IP);
 
-            SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-            String sharedNodes = prefs.getString("sharingNodesJSON", "[]");
-            JSONArray jsonArray = new JSONArray(sharedNodes);
-
+            JSONArray jsonArray = new JSONArray(getSharedPreferences());
             jsonArray.put(object);
+
             SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
             editor.putString("sharingNodesJSON", jsonArray.toString());
             editor.commit();
