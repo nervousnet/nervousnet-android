@@ -40,15 +40,14 @@ import ch.ethz.coss.nervousnet.vm.configuration.BasicSensorConfiguration;
 
 
 public class LocationSensor extends BaseSensor {
+
+    private static final String LOG_TAG = BaseSensor.class.getSimpleName();
+
     LocationManager locationManager;
-
-    // Define a listener that responds to location updates
-    LocationListener locationListener;
-
     Context mContext;
 
-    {
-        locationListener = new LocationListener() {
+    // Define a listener that responds to location updates
+    LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 //TODO push() reading
@@ -73,7 +72,6 @@ public class LocationSensor extends BaseSensor {
             public void onProviderDisabled(String provider) {
             }
         };
-    }
 
     public LocationSensor(Context context, BasicSensorConfiguration conf) {
         super(context, conf);
@@ -84,7 +82,6 @@ public class LocationSensor extends BaseSensor {
 
     @Override
     protected boolean startListener() {
-
         // check if permissions and network/gps available
 
         if (!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
