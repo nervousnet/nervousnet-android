@@ -56,6 +56,8 @@ public class LocationSensor extends BaseSensor {
                 location.getLatitude();
 
                 SensorReading reading = new SensorReading(sensorID, sensorName, paramNames);
+                long timestamp = System.currentTimeMillis();
+                reading.setTimestampEpoch(timestamp);
                 ArrayList values = new ArrayList();
                 values.add(location.getLatitude());
                 values.add(location.getLongitude());
