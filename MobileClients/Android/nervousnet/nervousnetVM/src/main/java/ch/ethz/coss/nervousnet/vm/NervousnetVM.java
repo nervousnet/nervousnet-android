@@ -99,7 +99,7 @@ public class NervousnetVM {
     private BaseSensor initSensor(BasicSensorConfiguration sensorConf)
             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
             InvocationTargetException, InstantiationException, SensorIsOffException {
-        Log.d(LOG_TAG, "initSensor called for sensorID: " + sensorConf.getSensorID());
+        Log.d(LOG_TAG, "initSensor called for sensorID: " + sensorConf.getSensorID() + " " + sensorConf.getWrapperName());
         if (sensorWrappersMap.containsKey(sensorConf.getSensorID())) {
             sensorWrappersMap.get(sensorConf.getSensorID()).stop();
         }
@@ -118,7 +118,6 @@ public class NervousnetVM {
             sensorWrappersMap.put(sensorConf.getSensorID(), sensorListener);
 //            nervousnetDB.createTableIfNotExists(sensorConf);
             //sensorListener.start();
-
 
             return sensorListener;
         }

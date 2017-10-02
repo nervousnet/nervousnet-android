@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class AndroidSensor extends BaseSensor implements SensorEventListener {
         reading.setValues(values);
         // Push reading
         push(reading);
-        //Log.d("SENSOR", ""+reading.getSensorName() + " " + TextUtils.join(", ", values));
+//        Log.d("SENSOR", ""+reading.getSensorName() + " " + TextUtils.join(", ", values));
     }
 
 

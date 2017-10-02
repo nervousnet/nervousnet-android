@@ -139,7 +139,7 @@ public class SensorStatisticsViewActivity extends BaseActivity implements Nervou
                     lastLoc = nervousnetServiceController.getLatestReading(LibConstants.SENSOR_GYROSCOPE);
                     break;
                 case 3:
-                    lastLoc = nervousnetServiceController.getLatestReading(1003);
+                    lastLoc = nervousnetServiceController.getLatestReading(6);
                     break;
             }
 
@@ -147,7 +147,7 @@ public class SensorStatisticsViewActivity extends BaseActivity implements Nervou
 
             String point = "point0 = [Date.UTC(" + year + "," + month + "," + day + "," + hour + "," + minute + "," + second + ")," + values.get(0) + "];"
                 + "point1 = [Date.UTC(" + year + "," + month + "," + day + "," + hour + "," + minute + "," + second + ")," + values.get(1) + "];"
-                + "point2 = [Date.UTC(" + year + "," + month + "," + day + "," + hour + "," + minute + "," + second + ")," + values.get(2) + "];";
+                + "point2 = [Date.UTC(" + year + "," + month + "," + day + "," + hour + "," + minute + "," + second + ")," + 0 + "];";
 
             webView.evaluateJavascript(point, new ValueCallback<String>() {
                 @Override
